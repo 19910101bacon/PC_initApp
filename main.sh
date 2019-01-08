@@ -1,5 +1,5 @@
 #!/bin/bash
-. ./bin/script.sh 
+. ./bin/script.sh
 
 if [ "$(uname)" == "Darwin" ]; then
     brew install python3 2> /dev/null;
@@ -13,17 +13,24 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm
 fi
 
-## install plugin 
+git submodule update --init --recursive
+
+## install plugin
 
 vundleSite="git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim"
-vimorbitalSite="git clone https://github.com/fcpg/vim-orbital ~/.vim/bundle/vim-orbital"
-YouCompleteMeSite="git clone https://github.com/Valloric/YouCompleteMe.git ~/.vim/bundle/YouCompleteMe ; 
+vimNerdcommenterSite="git clone https://github.com/scrooloose/nerdcommenter ~/.vim/bundle/nerdcommenter"
+vimGruvboxSite="git clone https://github.com/morhetz/gruvbox.git ~/.vim/bundle/gruvbox"
+vimCtrlpSite="git clone https://github.com/kien/ctrlp.vim ~/.vim/bundle/ctrlp.vim"
+YouCompleteMeSite="git clone https://github.com/Valloric/YouCompleteMe.git ~/.vim/bundle/YouCompleteMe ;
     cd ~/.vim/bundle/YouCompleteMe ;
     python install.py --all"
 
 bundleCheck "Vundle.vim" "$vundleSite" &
-bundleCheck "vim-orbital" "$vimorbitalSite" &
+bundleCheck "nerdcommenter" "$vimNerdcommenterSite" &
+bundleCheck "dracula-theme" "$vimGruvboxSite" &
+bundleCheck "ctrlp.vim" "$vimCtrlpSite" &
 bundleCheck "YouCompleteMe" "$YouCompleteMeSite" &
+
 
 ## vimrc setting
 . ./vimSet/editVimrc.sh
@@ -32,7 +39,7 @@ bundleCheck "YouCompleteMe" "$YouCompleteMeSite" &
 if [ "$(uname)" == "Darwin" ]; then
     brew install pyenv
     brew install pyenv-virtualenv
-    
+
     PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
@@ -44,5 +51,3 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bash_profile
     exec "$SHELL"
 fi
-
-
